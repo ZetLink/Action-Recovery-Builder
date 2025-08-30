@@ -113,10 +113,10 @@ jobs:
 
     - name: Build it
       run: |
+        export BUILD_OFOX=true
         set +e
         source build/envsetup.sh
         set -e
-        export BUILD_OFOX=true
         export ALLOW_MISSING_DEPENDENCIES=true
         export FOX_BUILD_DEVICE=${{ inputs.DEVICE_NAME }}
         export LC_ALL="C"
@@ -126,7 +126,7 @@ jobs:
         else
           echo "No additional commands specified."
         fi
-        lunch twrp_${{ inputs.DEVICE_NAME }}-eng && mka $(tr -d _ <<< ${{ inputs.BUILD_TARGET }})image
+        BUILD_OFOX=true lunch twrp_${{ inputs.DEVICE_NAME }}-eng && mka $(tr -d _ <<< ${{ inputs.BUILD_TARGET }})image
       working-directory: fox_${{ inputs.MANIFEST_BRANCH }}
 
     - name: Upload to Release
