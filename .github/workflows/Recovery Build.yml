@@ -23,6 +23,18 @@ on:
         description: 'Path the device tree should be synced to, relative to source root'
         required: true
         default: 'device/motorola/rhode'
+      DEVICE_KERNEL_URL:
+        description: 'Device Kernel URL'
+        required: true
+        default: 'https://github.com/SM6225-Motorola/DanceKernel'
+      DEVICE_KERNEL_BRANCH:
+        description: 'Device Kernel Branch'
+        required: true
+        default: 'main'
+      KERNEL_PATH:
+        description: 'Path the kernel should be synced to, relative to source root'
+        required: true
+        default: 'kernel/motorola/sm6225'
       DEVICE_NAME:
         description: 'Device Name from tree (should match name on twrp_<DEVICE_NAME>.mk)'
         required: true
@@ -53,6 +65,9 @@ jobs:
         echo "Device Tree URL: ${{ inputs.DEVICE_TREE_URL }}"
         echo "Device Tree Branch: ${{ inputs.DEVICE_TREE_BRANCH }}"
         echo "Device Path: ${{ inputs.DEVICE_PATH }}"
+        echo "Device Kernel URL" ${{ inputs.DEVICE_KERNEL_URL }}"
+        echo "Device Kernel Branch: ${{ inputs.DEVICE_KERNEL_BRANCH }}"
+        echo "Kernel Path: ${{ inputs.KERNEL_PATH }}"
         echo "Device Name: ${{ inputs.DEVICE_NAME }}"
         echo "Build Target: ${{ inputs.BUILD_TARGET }}.img"
         echo "::endgroup::"
@@ -90,6 +105,8 @@ jobs:
       run: |
         mkdir -p .repo/local_manifests
         cp -f ${GITHUB_WORKSPACE}/templates/roomservice.xml .repo/local_manifests/
+
+        # ----- DEVICE TREE -----
         REMOTE_NAME=$(grep -oP '(?<=://).*(?=\.)' <<< ${{ inputs.DEVICE_TREE_URL }})
         REMOTE_FETCH=$(grep -oP '(?<=://).*?(?=\/)' <<< ${{ inputs.DEVICE_TREE_URL }})
         if [ "${REMOTE_NAME}" != "github" ]; then
@@ -100,7 +117,23 @@ jobs:
         sed -i "s%{DEVICE_PATH}%${{ inputs.DEVICE_PATH }}%g" .repo/local_manifests/roomservice.xml
         sed -i "s%{DEVICE_REMOTE_NAME}%${REMOTE_NAME}%g" .repo/local_manifests/roomservice.xml
         sed -i "s%{DEVICE_TREE_BRANCH}\"/-->%${{ inputs.DEVICE_TREE_BRANCH }}\"/>%g" .repo/local_manifests/roomservice.xml
+
+        # ----- KERNEL -----
+        KERNEL_REMOTE_NAME=$(grep -oP '(?<=://).*(?=\.)' <<< ${{ inputs.DEVICE_KERNEL_URL }})
+        KERNEL_REMOTE_FETCH=$(grep -oP '(?<=://).*?(?=\/)' <<< ${{ inputs.DEVICE_KERNEL_URL }})
+        if [ "${KERNEL_REMOTE_NAME}" != "github" ]; then
+          sed -i "s%\!--remote name=\"{KERNEL_REMOTE_NAME}%remote name=\"${KERNEL_REMOTE_NAME}%g" .repo/local_manifests/roomservice.xml
+          sed -i "s%{KERNEL_REMOTE_FETCH}\"/-->%${KERNEL_REMOTE_FETCH}\"/>%g" .repo/local_manifests/roomservice.xml
+        fi
+        sed -i "s%\!--project name=\"{DEVICE_KERNEL_URL_REPO}%project name=\"$(grep -oP "(?<=${KERNEL_REMOTE_FETCH}/).*" <<< ${{ inputs.DEVICE_KERNEL_URL }})%g" .repo/local_manifests/roomservice.xml
+        sed -i "s%{DEVICE_KERNEL_PATH}%${{ inputs.DEVICE_KERNEL_PATH }}%g" .repo/local_manifests/roomservice.xml
+        sed -i "s%{KERNEL_REMOTE_NAME}%${KERNEL_REMOTE_NAME}%g" .repo/local_manifests/roomservice.xml
+        sed -i "s%{DEVICE_KERNEL_BRANCH}\"/-->%${{ inputs.DEVICE_KERNEL_BRANCH }}\"/>%g" .repo/local_manifests/roomservice.xml
+
+        # Sync repos
         repo sync ${{ inputs.DEVICE_PATH }} -j$(nproc --all)
+        repo sync ${{ inputs.DEVICE_KERNEL_PATH }} -j$(nproc --all)
+        
         DT_NAME=$(awk -F/ '{print $NF}' <<< ${{ inputs.DEVICE_TREE_URL }})
         if [ "$DT_NAME" != ${{ inputs.DEVICE_NAME }} ]; then
           echo "[!] Warning: Repo name and DEVICE_NAME do not match. Please check manually."
