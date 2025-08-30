@@ -103,11 +103,7 @@ jobs:
         repo sync ${{ inputs.DEVICE_PATH }} -j$(nproc --all)
         DT_NAME=$(awk -F/ '{print $NF}' <<< ${{ inputs.DEVICE_TREE_URL }})
         if [ "$DT_NAME" != ${{ inputs.DEVICE_NAME }} ]; then
-          if [ -z "$(ls ${{ inputs.DEVICE_PATH }}/${{ inputs.DEVICE_NAME }}/BoardConfig.mk 2>/dev/null)" ]; then
-            mkdir ${{ inputs.DEVICE_PATH }}/${{ inputs.DEVICE_NAME }}
-            DT_BoardConfig=$(ls ${{ inputs.DEVICE_PATH }}/BoardConfig* | head -1)
-            echo -e "-include ${DT_BoardConfig}">${{ inputs.DEVICE_PATH }}/${{ inputs.DEVICE_NAME }}/BoardConfig.mk
-          fi
+          echo "[!] Warning: Repo name and DEVICE_NAME do not match. Please check manually."
         fi
       working-directory: fox_${{ inputs.MANIFEST_BRANCH }}
 
