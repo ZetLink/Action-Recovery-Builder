@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <!--remote name="{REMOTE_NAME}"
-          fetch="https://{REMOTE_FETCH}"/-->
+  <remote name="github" fetch="https://github.com/" />
 
   <!-- Device tree -->
-  <!--project name="{DEVICE_TREE_URL_REPO}"
-           path="{DEVICE_PATH}"
-           remote="{DEVICE_REMOTE_NAME}"
-           revision="{DEVICE_TREE_BRANCH}"/-->
+  <project name="ZetLink/android_motorola_rhode-OrangeFox" path="device/motorola/rhode" remote="github" revision="android-12.1"/>
 
   <!-- Kernel -->
-  <!--project name="{DEVICE_KERNEL_URL_REPO}"
-           path="{KERNEL_PATH}"
-           remote="{KERNEL_REMOTE_NAME}"
-           revision="{DEVICE_KERNEL_BRANCH}"/-->
+  <project name="SM6225-Motorola/DanceKernel" path="kernel/motorola/sm6225" remote="github" revision="main"/>
 </manifest>
