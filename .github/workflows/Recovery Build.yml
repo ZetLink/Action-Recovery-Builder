@@ -65,7 +65,7 @@ jobs:
         echo "Device Tree URL: ${{ inputs.DEVICE_TREE_URL }}"
         echo "Device Tree Branch: ${{ inputs.DEVICE_TREE_BRANCH }}"
         echo "Device Path: ${{ inputs.DEVICE_PATH }}"
-        echo "Device Kernel URL" ${{ inputs.DEVICE_KERNEL_URL }}"
+        echo "Device Kernel URL ${{ inputs.DEVICE_KERNEL_URL }}"
         echo "Device Kernel Branch: ${{ inputs.DEVICE_KERNEL_BRANCH }}"
         echo "Kernel Path: ${{ inputs.KERNEL_PATH }}"
         echo "Device Name: ${{ inputs.DEVICE_NAME }}"
