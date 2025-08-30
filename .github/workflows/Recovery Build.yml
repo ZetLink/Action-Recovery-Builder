@@ -80,9 +80,8 @@ jobs:
     - name: Place device trees and kernel
       run: |
         mkdir -p .repo/local_manifests
-        cp -f ${GITHUB_WORKSPACE}/templates/roomservice.xml .repo/local_manifests/
-        # Sync repos
-        repo sync
+        git clone https://github.com/ZetLink/android_motorola_rhode-OrangeFox -b android-12.1 ${{ github.workspace }}/fox_${{ inputs.MANIFEST_BRANCH }}/device/motorola/rhode
+        git clone https://github.com/SM6225-Motorola/DanceKernel -b main ${{ github.workspace }}/fox_${{ inputs.MANIFEST_BRANCH }}/kernel/motorola/sm6225
       working-directory: fox_${{ inputs.MANIFEST_BRANCH }}
 
     - name: Build it
