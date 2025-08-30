@@ -18,7 +18,7 @@ on:
       DEVICE_TREE_BRANCH:
         description: 'Device Tree Branch'
         required: true
-        default: 'fox_12.1'
+        default: 'android-12.1'
       DEVICE_PATH:
         description: 'Path the device tree should be synced to, relative to source root'
         required: true
@@ -116,6 +116,7 @@ jobs:
         set +e
         source build/envsetup.sh
         set -e
+        export BUILD_OFOX 
         export ALLOW_MISSING_DEPENDENCIES=true
         export FOX_BUILD_DEVICE=${{ inputs.DEVICE_NAME }}
         export LC_ALL="C"
