@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
   <!-- Device tree -->
-  <project name="ZetLink/android_motorola_rhode-OrangeFox" path="device/motorola/rhode" remote="github" revision="android-12.1"/>
+  <project name="ZetLink/android_motorola_rhode-OrangeFox" path="device/motorola/rhode" remote="github" revision="boot"/>
 
   <!-- Kernel -->
   <project name="SM6225-Motorola/DanceKernel" path="kernel/motorola/sm6225" remote="github" revision="main"/>
