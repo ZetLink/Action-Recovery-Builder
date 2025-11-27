@@ -80,7 +80,7 @@ jobs:
     - name: Place device trees and kernel
       run: |
         mkdir -p .repo/local_manifests
-        https://github.com/SM6225-Motorola/android_device_motorola_devon-OFRP -b fox_12.1 ${{ github.workspace }}/fox_${{ inputs.MANIFEST_BRANCH }}/device/motorola/devon
+        git clone https://github.com/SM6225-Motorola/android_device_motorola_devon-OFRP -b fox_12.1 ${{ github.workspace }}/fox_${{ inputs.MANIFEST_BRANCH }}/device/motorola/devon
         git clone https://github.com/SM6225-Motorola/DanceKernel -b main ${{ github.workspace }}/fox_${{ inputs.MANIFEST_BRANCH }}/kernel/motorola/sm6225
       working-directory: fox_${{ inputs.MANIFEST_BRANCH }}
 
